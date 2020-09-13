@@ -17,7 +17,9 @@
     ],
     "require": {
         "php": "^7.4",
-        "illuminate/support": "^v8.0"
+        "guzzlehttp/guzzle": "^7.0",
+        "illuminate/support": "^8.0",
+        "ext-json": "*"
     },
     "require-dev": {
         "orchestra/testbench": "^6.0",
@@ -25,7 +27,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Puntodev\\Paypal\\": "src"
+            "Puntodev\\Payments\\": "src"
         }
     },
     "autoload-dev": {
@@ -44,10 +46,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Puntodev\\Paypal\\PaypalServiceProvider"
+                "PayPalServiceProvider"
             ],
             "aliases": {
-                "Paypal": "Puntodev\\Paypal\\PaypalFacade"
+                "Paypal": "PayPalFacade"
             }
         }
     }
