@@ -1,0 +1,54 @@
+{
+    "name": "puntodev/paypal",
+    "description": "PayPal API Client",
+    "keywords": [
+        "puntodev",
+        "paypal"
+    ],
+    "homepage": "https://github.com/puntodev/paypal",
+    "license": "MIT",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Mariano Goldman",
+            "email": "mariano.goldman@puntodev.com.ar",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^7.4",
+        "illuminate/support": "^v8.0"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^6.0",
+        "phpunit/phpunit": "^9.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "Puntodev\\Paypal\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit",
+        "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
+
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Puntodev\\Paypal\\PaypalServiceProvider"
+            ],
+            "aliases": {
+                "Paypal": "Puntodev\\Paypal\\PaypalFacade"
+            }
+        }
+    }
+}
