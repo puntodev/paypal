@@ -1,6 +1,5 @@
 .tmp/
 build
-composer.lock
 docs
 vendor
 coverage
