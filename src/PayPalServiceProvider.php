@@ -3,6 +3,7 @@
 namespace Puntodev\Payments;
 
 use Illuminate\Support\ServiceProvider;
+use Spatie\Dashboard\Dashboard;
 
 class PayPalServiceProvider extends ServiceProvider
 {
@@ -27,7 +28,7 @@ class PayPalServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(__DIR__ . '/../config/paypal.php', 'paypal');
 
         // Register the main class to use with the facade
-        $this->app->singleton('paypal', function ($app) {
+        $this->app->singleton(PayPal::class, function ($app) {
             $clientKey = config('paypal.client_id');
             $clientSecret = config('paypal.client_secret');
             $useSandbox = config('paypal.use_sandbox');
@@ -38,5 +39,6 @@ class PayPalServiceProvider extends ServiceProvider
                 $useSandbox
             );
         });
+        $this->app->alias(PayPal::class, 'paypal');
     }
 }
