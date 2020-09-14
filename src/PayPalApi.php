@@ -4,8 +4,6 @@
 namespace Puntodev\Payments;
 
 
-use GuzzleHttp\Exception\GuzzleException;
-use GuzzleHttp\RequestOptions;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
@@ -70,7 +68,6 @@ class PayPalApi
     {
         $token = $this->getToken();
         return Http::withToken($token['access_token'])
-            ->withToken($token['access_token'])
             ->get("https://{$this->host}/v2/checkout/orders/$id")
             ->throw()
             ->json();
