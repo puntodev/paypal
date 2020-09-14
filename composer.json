@@ -45,10 +45,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "PayPalServiceProvider"
+                "Puntodev\\Payments\\PayPalServiceProvider"
             ],
             "aliases": {
-                "Paypal": "PayPalFacade"
+                "Paypal": "Puntodev\\Payments\\PayPalFacade"
             }
         }
     }
