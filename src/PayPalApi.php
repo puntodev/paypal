@@ -70,7 +70,6 @@ class PayPalApi
     {
         $token = $this->getToken();
         return Http::withToken($token['access_token'])
-            ->withToken($token['access_token'])
             ->get("https://{$this->host}/v2/checkout/orders/$id")
             ->throw()
             ->json();
