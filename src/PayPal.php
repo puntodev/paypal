@@ -2,13 +2,8 @@
 
 namespace Puntodev\Payments;
 
-use GuzzleHttp\Client as GuzzleHttpClient;
-
 class PayPal
 {
-    /** @var GuzzleHttpClient */
-    private GuzzleHttpClient $client;
-
     /** @var string */
     private string $clientId;
 
@@ -21,23 +16,20 @@ class PayPal
     /**
      * PayPalApiFactory constructor.
      *
-     * @param GuzzleHttpClient $client
      * @param string $clientId
      * @param string $clientSecret
      * @param bool $useSandbox
      */
-    public function __construct(GuzzleHttpClient $client, string $clientId, string $clientSecret, bool $useSandbox)
+    public function __construct(string $clientId, string $clientSecret, bool $useSandbox)
     {
         $this->useSandbox = $useSandbox;
         $this->clientId = $clientId;
         $this->clientSecret = $clientSecret;
-        $this->client = $client;
     }
 
     public function defaultClient()
     {
-        return new PayPalApiWrapper(
-            $this->client,
+        return new PayPalApi(
             $this->clientId,
             $this->clientSecret,
             $this->useSandbox
@@ -46,8 +38,7 @@ class PayPal
 
     public function withCredentials($clientId, $clientSecret)
     {
-        return new PayPalApiWrapper(
-            $this->client,
+        return new PayPalApi(
             $clientId,
             $clientSecret,
             $this->useSandbox

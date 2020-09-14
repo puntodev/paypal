@@ -13,6 +13,10 @@
         <testdoxHtml outputFile="./.tmp/test-results/testdox.html"/>
     </logging>
 
+    <php>
+        <env name="SANDBOX_GATEWAYS" value="true"/>
+    </php>
+
     <coverage processUncoveredFiles="true">
         <include>
             <directory suffix=".php">src</directory>

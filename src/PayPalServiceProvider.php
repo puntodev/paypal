@@ -2,7 +2,6 @@
 
 namespace Puntodev\Payments;
 
-use GuzzleHttp\Client as GuzzleHttpClient;
 use Illuminate\Support\ServiceProvider;
 
 class PayPalServiceProvider extends ServiceProvider
@@ -28,17 +27,12 @@ class PayPalServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(__DIR__ . '/../config/paypal.php', 'paypal');
 
         // Register the main class to use with the facade
-        $this->app->singleton('paypal', function () {
+        $this->app->singleton('paypal', function ($app) {
             $clientKey = config('paypal.client_id');
             $clientSecret = config('paypal.client_secret');
             $useSandbox = config('paypal.use_sandbox');
 
             return new PayPal(
-                new GuzzleHttpClient([
-                    'headers' => [
-                        'Accept' => 'application/json'
-                    ]
-                ]),
                 $clientKey,
                 $clientSecret,
                 $useSandbox
