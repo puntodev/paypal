@@ -1,13 +1,10 @@
 <?php
 
-namespace Puntodev\Paypal;
+namespace Puntodev\Payments;
 
 use Illuminate\Support\Facades\Facade;
 
-/**
- * @see \Puntodev\Paypal\Skeleton\SkeletonClass
- */
-class PaypalFacade extends Facade
+class PayPalFacade extends Facade
 {
     /**
      * Get the registered name of the component.
