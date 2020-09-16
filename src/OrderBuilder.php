@@ -72,7 +72,7 @@ class OrderBuilder
      * @param string $locale
      * @return OrderBuilder
      */
-    public function setLocale(string $locale): OrderBuilder
+    public function locale(string $locale): OrderBuilder
     {
         $this->locale = $locale;
         return $this;
