@@ -11,6 +11,7 @@ class OrderBuilder
     private int $amount = 0;
     private string $description = '';
     private string $brandName = '';
+    private string $locale = 'es-AR';
     private string $returnUrl = '';
     private string $cancelUrl = '';
 
@@ -68,6 +69,16 @@ class OrderBuilder
     }
 
     /**
+     * @param string $locale
+     * @return OrderBuilder
+     */
+    public function setLocale(string $locale): OrderBuilder
+    {
+        $this->locale = $locale;
+        return $this;
+    }
+
+    /**
      * @param string $returnUrl
      * @return OrderBuilder
      */
@@ -87,7 +98,8 @@ class OrderBuilder
         return $this;
     }
 
-    public function make(): array {
+    public function make(): array
+    {
         return [
             'intent' => 'CAPTURE',
             'purchase_units' => [
@@ -105,7 +117,7 @@ class OrderBuilder
             ],
             'application_context' => [
                 'brand_name' => $this->brandName,
-                'locale' => 'es-AR',
+                'locale' => $this->locale,
                 'user_action' => 'PAY_NOW',
                 'payment_method' => [
                     'payee_preferred' => 'IMMEDIATE_PAYMENT_REQUIRED',

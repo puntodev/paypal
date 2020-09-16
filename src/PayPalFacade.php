@@ -13,6 +13,6 @@ class PayPalFacade extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'paypal';
+        return PayPal::class;
     }
 }

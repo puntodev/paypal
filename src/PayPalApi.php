@@ -43,7 +43,6 @@ class PayPalApi
 
     /**
      * @param array $order
-     *
      * @return array
      * @throws RequestException
      */
@@ -73,6 +72,11 @@ class PayPalApi
             ->json();
     }
 
+    /**
+     * @param string $orderId
+     * @return array|null
+     * @throws RequestException
+     */
     public function captureOrder(string $orderId): ?array
     {
         $token = $this->getToken();
@@ -88,7 +92,6 @@ class PayPalApi
 
     /**
      * @param string $querystring
-     *
      * @return string
      * @throws RequestException
      */
