@@ -46,7 +46,7 @@ class PayPalApiTest extends TestCase
         $order = (new OrderBuilder())
             ->externalId($this->faker->uuid)
             ->currency('USD')
-            ->amount(23)
+            ->amount(23.20)
             ->description('My custom product')
             ->brandName('My brand name')
             ->returnUrl('http://localhost:8080/return')
