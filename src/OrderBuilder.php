@@ -8,7 +8,7 @@ class OrderBuilder
 {
     private string $externalId = '';
     private string $currency = '';
-    private int $amount = 0;
+    private float $amount = 0;
     private string $description = '';
     private string $brandName = '';
     private string $locale = 'es-AR';
@@ -39,10 +39,10 @@ class OrderBuilder
     }
 
     /**
-     * @param int $amount
+     * @param float $amount
      * @return OrderBuilder
      */
-    public function amount(int $amount): OrderBuilder
+    public function amount(float $amount): OrderBuilder
     {
         $this->amount = $amount;
         return $this;
@@ -107,7 +107,7 @@ class OrderBuilder
                     'custom_id' => $this->externalId,
                     'amount' => [
                         'currency_code' => $this->currency,
-                        'value' => $this->amount,
+                        'value' => round($this->amount, 2),
                     ],
                     'description' => $this->description,
                     'payment_options' => [
