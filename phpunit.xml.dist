@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" bootstrap="vendor/autoload.php" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.0/phpunit.xsd" colors="true" cacheDirectory=".phpunit.cache">
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" bootstrap="vendor/autoload.php" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.1/phpunit.xsd" colors="true" cacheDirectory=".phpunit.cache">
   <testsuites>
     <testsuite name="Test Suite">
       <directory>tests</directory>
@@ -13,12 +13,14 @@
     <env name="SANDBOX_GATEWAYS" value="true"/>
   </php>
   <coverage>
-    <include>
-      <directory suffix=".php">src</directory>
-    </include>
     <report>
       <html outputDirectory="./.tmp/test-results/coverage" lowUpperBound="35" highLowerBound="70"/>
       <php outputFile="./.tmp/test-results/coverage.serialized"/>
     </report>
   </coverage>
+  <source>
+    <include>
+      <directory suffix=".php">src</directory>
+    </include>
+  </source>
 </phpunit>
