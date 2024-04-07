@@ -16,14 +16,14 @@
         }
     ],
     "require": {
-        "php": "^8.1",
+        "php": "^8.2",
         "guzzlehttp/guzzle": "^7.5.0",
-        "illuminate/support": "^10.0",
+        "illuminate/support": "^11.0",
         "ext-json": "*"
     },
     "require-dev": {
-        "orchestra/testbench": "^8",
-        "phpunit/phpunit": "^10"
+        "orchestra/testbench": "^9",
+        "phpunit/phpunit": "^11"
     },
     "autoload": {
         "psr-4": {

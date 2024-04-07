@@ -7,7 +7,7 @@ use Puntodev\Payments\PayPalServiceProvider;
 
 abstract class TestCase extends Orchestra
 {
-    protected function getPackageProviders($app)
+    protected function getPackageProviders($app): array
     {
         return [
             PayPalServiceProvider::class
