@@ -6,6 +6,7 @@ use Exception;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Facades\Log;
+use PHPUnit\Framework\Attributes\Test;
 use Puntodev\Payments\OrderBuilder;
 use Puntodev\Payments\PayPalApi;
 
@@ -32,7 +33,8 @@ class PayPalApiTest extends TestCase
         $app['config']->set('paypal.use_sandbox', env('SANDBOX_GATEWAYS'));
     }
 
-    public function testVerifyIpn()
+    #[Test]
+    public function verify_ipn()
     {
         $this->assertEquals('INVALID', $this->paypalApi->verifyIpn('saraza'));
     }
@@ -41,7 +43,8 @@ class PayPalApiTest extends TestCase
      * @return void
      * @throws RequestException
      */
-    public function testCreateOrder()
+    #[Test]
+    public function create_order()
     {
         $order = (new OrderBuilder())
             ->externalId($this->faker->uuid)
@@ -66,11 +69,13 @@ class PayPalApiTest extends TestCase
         $this->assertStringStartsWith('https://www.sandbox.paypal.com/checkoutnow', $link['href']);
     }
 
+
     /**
      * @return void
      * @throws Exception
      */
-    public function testFindOrderByIdInvalid()
+    #[Test]
+    public function find_order_by_id_invalid()
     {
         $this->expectException(RequestException::class);
         $this->paypalApi->findOrderById('invalid-id');
@@ -80,7 +85,8 @@ class PayPalApiTest extends TestCase
      * @return void
      * @throws Exception
      */
-    public function testFindOrderById()
+    #[Test]
+    public function find_order_by_id()
     {
         $payment = $this->paypalApi->findOrderById('5KX43952KL513742C');
         $this->assertIsArray($payment);
@@ -90,7 +96,8 @@ class PayPalApiTest extends TestCase
      * @return void
      * @throws Exception
      */
-    public function testCaptureOrder()
+    #[Test]
+    public function capture_order()
     {
         $this->expectException(RequestException::class);
 

@@ -2,12 +2,13 @@
 
 namespace Tests;
 
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Puntodev\Payments\OrderBuilder;
 
 class OrderBuilderTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function create_order_with_int_amount()
     {
         $order = (new OrderBuilder())

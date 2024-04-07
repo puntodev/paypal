@@ -2,19 +2,20 @@
 
 namespace Tests;
 
+use PHPUnit\Framework\Attributes\Test;
 use Puntodev\Payments\PayPal;
 use Puntodev\Payments\PayPalApi;
 
 class PaypalTest extends TestCase
 {
-    protected function getEnvironmentSetUp($app)
+    protected function getEnvironmentSetUp($app): void
     {
         $app['config']->set('paypal.client_id', 'PAYPAL_ID');
         $app['config']->set('paypal.client_secret', 'PAYPAL_SECRET');
         $app['config']->set('paypal.use_sandbox', 'true');
     }
 
-    /** @test */
+    #[Test]
     public function default_client()
     {
         /** @var PayPal $paypal */
@@ -25,7 +26,7 @@ class PaypalTest extends TestCase
         $this->assertInstanceOf(PayPalApi::class, $client);
     }
 
-    /** @test */
+    #[Test]
     public function with_credentials()
     {
         /** @var PayPal $paypal */
