@@ -112,6 +112,7 @@ class OrderBuilder
             'purchase_units' => [
                 [
                     'custom_id' => $this->externalId,
+                    'description' => $this->description,
                     'amount' => [
                         'currency_code' => $this->currency,
                         'value' => round($this->amount - $this->discount, 2),
@@ -122,22 +123,35 @@ class OrderBuilder
                             ],
                         ],
                     ],
-                    'description' => $this->description,
+                    'items' => [
+                        [
+                            'name' => $this->description,
+                            'quantity' => '1',
+                            'custom_id' => $this->externalId,
+                            'unit_amount' => [
+                                'currency_code' => $this->currency,
+                                'value' => round($this->amount, 2),
+                            ],
+                            'category' => 'DIGITAL_GOODS'
+                        ]
+                    ],
                     'payment_options' => [
                         'allowed_payment_method' => 'INSTANT_FUNDING_SOURCE'
                     ],
                 ]
             ],
-            'application_context' => [
-                'brand_name' => $this->brandName,
-                'locale' => $this->locale,
-                'user_action' => 'PAY_NOW',
-                'payment_method' => [
-                    'payee_preferred' => 'IMMEDIATE_PAYMENT_REQUIRED',
-                ],
-                'shipping_preference' => 'NO_SHIPPING',
-                'return_url' => $this->returnUrl,
-                'cancel_url' => $this->cancelUrl
+            'payment_source' => [
+                'paypal' => [
+                    'experience_context' => [
+                        'brand_name' => $this->brandName,
+                        'shipping_preference' => 'NO_SHIPPING',
+                        'user_action' => 'PAY_NOW',
+                        'payment_method_preference' => 'IMMEDIATE_PAYMENT_REQUIRED',
+                        'locale' => $this->locale,
+                        'return_url' => $this->returnUrl,
+                        'cancel_url' => $this->cancelUrl
+                    ]
+                ]
             ],
         ];
 

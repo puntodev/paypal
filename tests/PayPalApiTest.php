@@ -58,13 +58,12 @@ class PayPalApiTest extends TestCase
             ->make();
 
         $createdOrder = $this->paypalApi->createOrder($order);
-        Log::debug('Created Order: ', ['createdOrder' => $createdOrder]);
 
-        $this->assertEquals('CREATED', $createdOrder['status']);
-        $this->assertCount(4, $createdOrder['links']);
+        $this->assertEquals('PAYER_ACTION_REQUIRED', $createdOrder['status']);
+        $this->assertCount(2, $createdOrder['links']);
         $link = collect($createdOrder['links'])
             ->filter(function ($link) {
-                return $link['method'] === 'GET' && $link['rel'] === 'approve';
+                return $link['method'] === 'GET' && $link['rel'] === 'payer-action';
             })
             ->first();
         $this->assertStringStartsWith('https://www.sandbox.paypal.com/checkoutnow', $link['href']);

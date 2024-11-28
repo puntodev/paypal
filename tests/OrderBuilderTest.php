@@ -40,18 +40,32 @@ class OrderBuilderTest extends TestCase
                     'payment_options' => [
                         'allowed_payment_method' => 'INSTANT_FUNDING_SOURCE'
                     ],
+                    'items' => [
+                        [
+                            'name' => 'My custom product',
+                            'quantity' => '1',
+                            'custom_id' => '31fe5538-8589-437d-8823-3b0574186a5f',
+                            'unit_amount' => [
+                                'currency_code' => 'USD',
+                                'value' => 23.21,
+                            ],
+                            'category' => 'DIGITAL_GOODS',
+                        ]
+                    ]
                 ]
             ],
-            'application_context' => [
-                'brand_name' => 'My brand name',
-                'locale' => 'es-AR',
-                'user_action' => 'PAY_NOW',
-                'payment_method' => [
-                    'payee_preferred' => 'IMMEDIATE_PAYMENT_REQUIRED',
+            'payment_source' => [
+                'paypal' => [
+                    'experience_context' => [
+                        'brand_name' => 'My brand name',
+                        'locale' => 'es-AR',
+                        'user_action' => 'PAY_NOW',
+                        'payment_method_preference' => 'IMMEDIATE_PAYMENT_REQUIRED',
+                        'shipping_preference' => 'NO_SHIPPING',
+                        'return_url' => 'http://localhost:8080/return',
+                        'cancel_url' => 'http://localhost:8080/cancel'
+                    ],
                 ],
-                'shipping_preference' => 'NO_SHIPPING',
-                'return_url' => 'http://localhost:8080/return',
-                'cancel_url' => 'http://localhost:8080/cancel'
             ],
         ], $order);
     }
@@ -93,18 +107,32 @@ class OrderBuilderTest extends TestCase
                     'payment_options' => [
                         'allowed_payment_method' => 'INSTANT_FUNDING_SOURCE'
                     ],
+                    'items' => [
+                        [
+                            'name' => 'My custom product',
+                            'quantity' => '1',
+                            'custom_id' => '31fe5538-8589-437d-8823-3b0574186a5f',
+                            'unit_amount' => [
+                                'currency_code' => 'USD',
+                                'value' => 23.99,
+                            ],
+                            'category' => 'DIGITAL_GOODS',
+                        ]
+                    ]
                 ]
             ],
-            'application_context' => [
-                'brand_name' => 'My brand name',
-                'locale' => 'es-AR',
-                'user_action' => 'PAY_NOW',
-                'payment_method' => [
-                    'payee_preferred' => 'IMMEDIATE_PAYMENT_REQUIRED',
+            'payment_source' => [
+                'paypal' => [
+                    'experience_context' => [
+                        'brand_name' => 'My brand name',
+                        'locale' => 'es-AR',
+                        'user_action' => 'PAY_NOW',
+                        'payment_method_preference' => 'IMMEDIATE_PAYMENT_REQUIRED',
+                        'shipping_preference' => 'NO_SHIPPING',
+                        'return_url' => 'http://localhost:8080/return',
+                        'cancel_url' => 'http://localhost:8080/cancel'
+                    ],
                 ],
-                'shipping_preference' => 'NO_SHIPPING',
-                'return_url' => 'http://localhost:8080/return',
-                'cancel_url' => 'http://localhost:8080/cancel'
             ],
         ], $order);
     }
