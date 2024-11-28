@@ -5,7 +5,6 @@ namespace Tests;
 use Exception;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\Client\RequestException;
-use Illuminate\Support\Facades\Log;
 use PHPUnit\Framework\Attributes\Test;
 use Puntodev\Payments\OrderBuilder;
 use Puntodev\Payments\PayPalApi;
@@ -25,13 +24,6 @@ class PayPalApiTest extends TestCase
             config('paypal.use_sandbox'),
         );
     }
-
-//    protected function getEnvironmentSetUp($app)
-//    {
-//        $app['config']->set('paypal.client_id', env('PAYPAL_API_CLIENT_ID'));
-//        $app['config']->set('paypal.client_secret', env('PAYPAL_API_CLIENT_SECRET'));
-//        $app['config']->set('paypal.use_sandbox', env('SANDBOX_GATEWAYS'));
-//    }
 
     #[Test]
     public function verify_ipn()
