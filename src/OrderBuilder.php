@@ -9,6 +9,7 @@ class OrderBuilder
     private string $externalId = '';
     private string $currency = '';
     private float $amount = 0;
+    private float $discount = 0;
     private string $description = '';
     private string $brandName = '';
     private string $locale = 'es-AR';
@@ -45,6 +46,12 @@ class OrderBuilder
     public function amount(float $amount): OrderBuilder
     {
         $this->amount = $amount;
+        return $this;
+    }
+
+    public function discount(float $discount): OrderBuilder
+    {
+        $this->discount = $discount;
         return $this;
     }
 
@@ -100,14 +107,20 @@ class OrderBuilder
 
     public function make(): array
     {
-        return [
+        $arr = [
             'intent' => 'CAPTURE',
             'purchase_units' => [
                 [
                     'custom_id' => $this->externalId,
                     'amount' => [
                         'currency_code' => $this->currency,
-                        'value' => round($this->amount, 2),
+                        'value' => round($this->amount - $this->discount, 2),
+                        'breakdown' => [
+                            'item_total' => [
+                                'currency_code' => $this->currency,
+                                'value' => round($this->amount, 2),
+                            ],
+                        ],
                     ],
                     'description' => $this->description,
                     'payment_options' => [
@@ -127,5 +140,13 @@ class OrderBuilder
                 'cancel_url' => $this->cancelUrl
             ],
         ];
+
+        if ($this->discount > 0) {
+            $arr['purchase_units'][0]['amount']['breakdown']['discount'] = [
+                'currency_code' => $this->currency,
+                'value' => round($this->discount, 2),
+            ];
+        }
+        return $arr;
     }
 }
