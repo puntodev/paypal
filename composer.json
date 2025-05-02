@@ -18,11 +18,11 @@
     "require": {
         "php": "^8.3",
         "guzzlehttp/guzzle": "^7.9",
-        "illuminate/support": "^11.41",
+        "illuminate/support": "^12.12",
         "ext-json": "*"
     },
     "require-dev": {
-        "orchestra/testbench": "^9.9",
+        "orchestra/testbench": "^10.0",
         "phpunit/phpunit": "^11.5"
     },
     "autoload": {
