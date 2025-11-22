@@ -5,6 +5,7 @@ namespace Tests;
 use Exception;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\Client\RequestException;
+use PHPUnit\Framework\Attributes\Depends;
 use PHPUnit\Framework\Attributes\Test;
 use Puntodev\Payments\OrderBuilder;
 use Puntodev\Payments\PayPalApi;
@@ -32,11 +33,11 @@ class PayPalApiTest extends TestCase
     }
 
     /**
-     * @return void
+     * @return string
      * @throws RequestException
      */
     #[Test]
-    public function create_order()
+    public function create_order(): string
     {
         $order = (new OrderBuilder())
             ->externalId($this->faker->uuid)
@@ -54,11 +55,11 @@ class PayPalApiTest extends TestCase
         $this->assertEquals('PAYER_ACTION_REQUIRED', $createdOrder['status']);
         $this->assertCount(2, $createdOrder['links']);
         $link = collect($createdOrder['links'])
-            ->filter(function ($link) {
-                return $link['method'] === 'GET' && $link['rel'] === 'payer-action';
-            })
+            ->filter(fn($link) => $link['method'] === 'GET' && $link['rel'] === 'payer-action')
             ->first();
         $this->assertStringStartsWith('https://www.sandbox.paypal.com/checkoutnow', $link['href']);
+
+        return $createdOrder['id'];
     }
 
     /**
@@ -77,9 +78,10 @@ class PayPalApiTest extends TestCase
      * @throws Exception
      */
     #[Test]
-    public function find_order_by_id()
+    #[Depends('create_order')]
+    public function find_order_by_id(string $orderId)
     {
-        $payment = $this->paypalApi->findOrderById('0C491420EY794663B');
+        $payment = $this->paypalApi->findOrderById($orderId);
         $this->assertIsArray($payment);
     }
 
