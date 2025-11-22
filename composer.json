@@ -17,13 +17,13 @@
     ],
     "require": {
         "php": ">=8.3 <9.0",
-        "guzzlehttp/guzzle": "^7.9",
-        "illuminate/support": "^12.14",
+        "guzzlehttp/guzzle": "^7.10",
+        "illuminate/support": "^12.39",
         "ext-json": "*"
     },
     "require-dev": {
-        "orchestra/testbench": "^10.3",
-        "phpunit/phpunit": "^11.1"
+        "orchestra/testbench": "^10.7",
+        "phpunit/phpunit": "^11.4"
     },
     "autoload": {
         "psr-4": {
