@@ -23,11 +23,11 @@
     },
     "require-dev": {
         "orchestra/testbench": "^10.9",
-        "phpunit/phpunit": "^11.4"
+        "phpunit/phpunit": "^12.4"
     },
     "autoload": {
         "psr-4": {
-            "Punto dev\\Payments\\": "src"
+            "Puntodev\\Payments\\": "src"
         }
     },
     "autoload-dev": {
