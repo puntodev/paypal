@@ -9,6 +9,7 @@ use PHPUnit\Framework\Attributes\Depends;
 use PHPUnit\Framework\Attributes\Test;
 use Puntodev\Payments\OrderBuilder;
 use Puntodev\Payments\PayPalApi;
+use Puntodev\Payments\PayPalApiClient;
 
 class PayPalApiTest extends TestCase
 {
@@ -19,7 +20,7 @@ class PayPalApiTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->paypalApi = new PayPalApi(
+        $this->paypalApi = new PayPalApiClient(
             config('paypal.client_id'),
             config('paypal.client_secret'),
             config('paypal.use_sandbox'),
