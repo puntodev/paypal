@@ -3,13 +3,9 @@
 namespace Puntodev\Payments;
 
 use Illuminate\Support\ServiceProvider;
-use Spatie\Dashboard\Dashboard;
 
 class PayPalServiceProvider extends ServiceProvider
 {
-    /**
-     * Bootstrap the application services.
-     */
     public function boot()
     {
         if ($this->app->runningInConsole()) {
@@ -19,24 +15,15 @@ class PayPalServiceProvider extends ServiceProvider
         }
     }
 
-    /**
-     * Register the application services.
-     */
     public function register()
     {
-        // Automatically apply the package configuration
         $this->mergeConfigFrom(__DIR__ . '/../config/paypal.php', 'paypal');
 
-        // Register the main class to use with the facade
         $this->app->singleton(PayPal::class, function ($app) {
-            $clientKey = config('paypal.client_id');
-            $clientSecret = config('paypal.client_secret');
-            $useSandbox = config('paypal.use_sandbox');
-
-            return new PayPal(
-                $clientKey,
-                $clientSecret,
-                $useSandbox
+            return new PayPalClient(
+                config('paypal.client_id'),
+                config('paypal.client_secret'),
+                config('paypal.use_sandbox'),
             );
         });
         $this->app->alias(PayPal::class, 'paypal');
