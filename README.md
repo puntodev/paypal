@@ -1,43 +1,150 @@
-# Very short description of the package
+# PayPal API Client for Laravel
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/puntodev/paypal.svg?style=flat-square)](https://packagist.org/packages/puntodev/paypal)
-[![Build Status](https://img.shields.io/travis/puntodev/paypal/master.svg?style=flat-square)](https://travis-ci.org/puntodev/paypal)
-[![Quality Score](https://img.shields.io/scrutinizer/g/puntodev/paypal.svg?style=flat-square)](https://scrutinizer-ci.com/g/puntodev/paypal)
 [![Total Downloads](https://img.shields.io/packagist/dt/puntodev/paypal.svg?style=flat-square)](https://packagist.org/packages/puntodev/paypal)
 
-This is where your description should go. Try and limit it to a paragraph or two, and maybe throw in a mention of what PSRs you support to avoid any confusion with users and contributors.
+A lightweight Laravel package that wraps the [PayPal Orders v2 API](https://developer.paypal.com/docs/api/orders/v2/)
+(create, find and capture orders) and provides classic IPN verification. It uses
+Laravel's HTTP client under the hood and caches the OAuth2 access token automatically.
+
+## Requirements
+
+- PHP `>=8.4 <9.0`
+- Laravel 12 / 13 (`illuminate/support` `^12.53 || ^13.0`)
 
 ## Installation
 
-You can install the package via composer:
+Install via composer:
 
 ```bash
 composer require puntodev/paypal
 ```
 
+The package auto-registers its service provider and the `Paypal` facade via Laravel
+package discovery. To publish the config file:
+
+```bash
+php artisan vendor:publish --provider="Puntodev\Payments\PayPalServiceProvider" --tag="config"
+```
+
+## Configuration
+
+Set the following environment variables:
+
+```dotenv
+PAYPAL_API_CLIENT_ID=your-client-id
+PAYPAL_API_CLIENT_SECRET=your-client-secret
+SANDBOX_GATEWAYS=true   # true -> sandbox, false -> production
+```
+
+These map to `config/paypal.php`:
+
+```php
+return [
+    'client_id' => env('PAYPAL_API_CLIENT_ID'),
+    'client_secret' => env('PAYPAL_API_CLIENT_SECRET'),
+    'use_sandbox' => env('SANDBOX_GATEWAYS', false),
+];
+```
+
+When `use_sandbox` is `true` the client targets `api.sandbox.paypal.com` and the
+sandbox IPN endpoint; otherwise it targets production.
+
 ## Usage
 
-``` php
-// Usage description here
+### Resolving the client
+
+Inject the `PayPal` contract (or use the `Paypal` facade) and obtain a `PayPalApi`
+instance. Use `defaultClient()` to use the configured credentials, or
+`withCredentials()` to override them at runtime (e.g. for multi-tenant setups):
+
+```php
+use Puntodev\Payments\PayPal;
+
+public function __construct(private PayPal $paypal) {}
+
+// With the credentials from config/paypal.php
+$api = $this->paypal->defaultClient();
+
+// Or with per-request credentials (sandbox flag still comes from config)
+$api = $this->paypal->withCredentials($clientId, $clientSecret);
 ```
 
-### Testing
+### Building an order
 
-``` bash
-composer test
+`OrderBuilder` produces the payload for the Orders v2 API. The order intent is
+`CAPTURE`, items are sent as `DIGITAL_GOODS` with `NO_SHIPPING`, and a discount is
+only included when greater than zero:
+
+```php
+use Puntodev\Payments\OrderBuilder;
+
+$order = (new OrderBuilder())
+    ->externalId('your-internal-id')
+    ->currency('USD')
+    ->amount(23.20)
+    ->discount(2.20)            // optional
+    ->description('My custom product')
+    ->brandName('My brand name')
+    ->locale('es-AR')           // defaults to es-AR
+    ->returnUrl('https://example.com/return')
+    ->cancelUrl('https://example.com/cancel')
+    ->make();
 ```
 
-### Changelog
+### Creating, finding and capturing orders
 
-Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recently.
+```php
+$created = $api->createOrder($order);
+$orderId = $created['id'];
+
+// Send the buyer to the "payer-action" link to approve the payment
+$approveUrl = collect($created['links'])
+    ->firstWhere('rel', 'payer-action')['href'];
+
+// Later, fetch or capture the order
+$order = $api->findOrderById($orderId);
+$capture = $api->captureOrder($orderId);
+```
+
+All order methods return the decoded JSON response as an `array` and throw
+`Illuminate\Http\Client\RequestException` on HTTP errors.
+
+### Verifying IPN notifications
+
+```php
+// In your IPN webhook controller
+$status = $api->verifyIpn($request->getContent()); // "VERIFIED" or "INVALID"
+
+if ($status === 'VERIFIED') {
+    // process the notification
+}
+```
+
+## Testing
+
+```bash
+composer test            # runs PHPUnit
+composer test-coverage   # generates HTML coverage report
+```
+
+> **Note:** the test suite (`tests/PayPalApiTest.php`) makes **real HTTP calls to
+> the PayPal sandbox**. You must provide valid sandbox credentials via
+> `PAYPAL_API_CLIENT_ID` and `PAYPAL_API_CLIENT_SECRET`. `phpunit.xml.dist` forces
+> `SANDBOX_GATEWAYS=true`.
+
+## Changelog
+
+Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
 
 ## Contributing
 
 Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 
-### Security
+## Security
 
-If you discover any security related issues, please email mariano.goldman@puntodev.com.ar instead of using the issue tracker.
+If you discover any security related issues, please email mariano.goldman@puntodev.com.ar
+instead of using the issue tracker.
 
 ## Credits
 
@@ -47,7 +154,3 @@ If you discover any security related issues, please email mariano.goldman@puntod
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
-
-## Laravel Package Boilerplate
-
-This package was generated using the [Laravel Package Boilerplate](https://laravelpackageboilerplate.com).
