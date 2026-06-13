@@ -85,7 +85,7 @@ class PayPalApiClient implements PayPalApi
             'Connection' => 'Close',
         ])
             ->withoutRedirecting()
-            ->withBody('cmd=_notify-validate&'.$querystring, 'application/x-www-form-urlencoded')
+            ->withBody('cmd=_notify-validate&' . $querystring, 'application/x-www-form-urlencoded')
             ->post($this->ipnUrl)
             ->throw()
             ->body();

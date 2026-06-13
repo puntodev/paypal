@@ -10,14 +10,14 @@ class PayPalServiceProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__.'/../config/paypal.php' => config_path('paypal.php'),
+                __DIR__ . '/../config/paypal.php' => config_path('paypal.php'),
             ], 'config');
         }
     }
 
     public function register()
     {
-        $this->mergeConfigFrom(__DIR__.'/../config/paypal.php', 'paypal');
+        $this->mergeConfigFrom(__DIR__ . '/../config/paypal.php', 'paypal');
 
         $this->app->singleton(PayPal::class, function ($app) {
             return new PayPalClient(
