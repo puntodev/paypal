@@ -11,7 +11,7 @@ class OrderBuilderTest extends TestCase
     #[Test]
     public function create_order_with_int_amount()
     {
-        $order = (new OrderBuilder())
+        $order = (new OrderBuilder)
             ->externalId('31fe5538-8589-437d-8823-3b0574186a5f')
             ->currency('USD')
             ->amount(23.206)
@@ -34,11 +34,11 @@ class OrderBuilderTest extends TestCase
                                 'currency_code' => 'USD',
                                 'value' => 23.21,
                             ],
-                        ]
+                        ],
                     ],
                     'description' => 'My custom product',
                     'payment_options' => [
-                        'allowed_payment_method' => 'INSTANT_FUNDING_SOURCE'
+                        'allowed_payment_method' => 'INSTANT_FUNDING_SOURCE',
                     ],
                     'items' => [
                         [
@@ -50,9 +50,9 @@ class OrderBuilderTest extends TestCase
                                 'value' => 23.21,
                             ],
                             'category' => 'DIGITAL_GOODS',
-                        ]
-                    ]
-                ]
+                        ],
+                    ],
+                ],
             ],
             'payment_source' => [
                 'paypal' => [
@@ -63,7 +63,7 @@ class OrderBuilderTest extends TestCase
                         'payment_method_preference' => 'IMMEDIATE_PAYMENT_REQUIRED',
                         'shipping_preference' => 'NO_SHIPPING',
                         'return_url' => 'http://localhost:8080/return',
-                        'cancel_url' => 'http://localhost:8080/cancel'
+                        'cancel_url' => 'http://localhost:8080/cancel',
                     ],
                 ],
             ],
@@ -73,7 +73,7 @@ class OrderBuilderTest extends TestCase
     #[Test]
     public function create_order_with_discount()
     {
-        $order = (new OrderBuilder())
+        $order = (new OrderBuilder)
             ->externalId('31fe5538-8589-437d-8823-3b0574186a5f')
             ->currency('USD')
             ->amount(23.99)
@@ -101,11 +101,11 @@ class OrderBuilderTest extends TestCase
                                 'currency_code' => 'USD',
                                 'value' => 3.98,
                             ],
-                        ]
+                        ],
                     ],
                     'description' => 'My custom product',
                     'payment_options' => [
-                        'allowed_payment_method' => 'INSTANT_FUNDING_SOURCE'
+                        'allowed_payment_method' => 'INSTANT_FUNDING_SOURCE',
                     ],
                     'items' => [
                         [
@@ -117,9 +117,9 @@ class OrderBuilderTest extends TestCase
                                 'value' => 23.99,
                             ],
                             'category' => 'DIGITAL_GOODS',
-                        ]
-                    ]
-                ]
+                        ],
+                    ],
+                ],
             ],
             'payment_source' => [
                 'paypal' => [
@@ -130,7 +130,7 @@ class OrderBuilderTest extends TestCase
                         'payment_method_preference' => 'IMMEDIATE_PAYMENT_REQUIRED',
                         'shipping_preference' => 'NO_SHIPPING',
                         'return_url' => 'http://localhost:8080/return',
-                        'cancel_url' => 'http://localhost:8080/cancel'
+                        'cancel_url' => 'http://localhost:8080/cancel',
                     ],
                 ],
             ],

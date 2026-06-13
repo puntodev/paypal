@@ -17,7 +17,7 @@ class PayPalApiTest extends TestCase
 
     private PayPalApi $paypalApi;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $this->paypalApi = new PayPalApiClient(
@@ -34,13 +34,12 @@ class PayPalApiTest extends TestCase
     }
 
     /**
-     * @return string
      * @throws RequestException
      */
     #[Test]
     public function create_order(): string
     {
-        $order = (new OrderBuilder())
+        $order = (new OrderBuilder)
             ->externalId($this->faker->uuid)
             ->currency('USD')
             ->amount(23.20)
@@ -56,7 +55,7 @@ class PayPalApiTest extends TestCase
         $this->assertEquals('PAYER_ACTION_REQUIRED', $createdOrder['status']);
         $this->assertCount(2, $createdOrder['links']);
         $link = collect($createdOrder['links'])
-            ->filter(fn($link) => $link['method'] === 'GET' && $link['rel'] === 'payer-action')
+            ->filter(fn ($link) => $link['method'] === 'GET' && $link['rel'] === 'payer-action')
             ->first();
         $this->assertStringStartsWith('https://www.sandbox.paypal.com/checkoutnow', $link['href']);
 
@@ -65,6 +64,7 @@ class PayPalApiTest extends TestCase
 
     /**
      * @return void
+     *
      * @throws Exception
      */
     #[Test]
@@ -76,6 +76,7 @@ class PayPalApiTest extends TestCase
 
     /**
      * @return void
+     *
      * @throws Exception
      */
     #[Test]
@@ -88,6 +89,7 @@ class PayPalApiTest extends TestCase
 
     /**
      * @return void
+     *
      * @throws Exception
      */
     #[Test]

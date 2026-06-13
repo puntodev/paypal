@@ -10,8 +10,11 @@ use Illuminate\Support\Facades\Log;
 class PayPalApiClient implements PayPalApi
 {
     private string $apiClientKey;
+
     private string $apiClientSecret;
+
     private string $host;
+
     private string $ipnUrl;
 
     public function __construct(string $apiClientKey, string $apiClientSecret, bool $useSandbox)
@@ -32,6 +35,7 @@ class PayPalApiClient implements PayPalApi
     public function createOrder(array $order): array
     {
         $token = $this->getToken();
+
         return Http::withToken($token['access_token'])
             ->withHeaders([
                 'Prefer' => 'return=representation',
@@ -47,6 +51,7 @@ class PayPalApiClient implements PayPalApi
     public function findOrderById(string $id): ?array
     {
         $token = $this->getToken();
+
         return Http::withToken($token['access_token'])
             ->get("https://{$this->host}/v2/checkout/orders/$id")
             ->throw()
@@ -59,6 +64,7 @@ class PayPalApiClient implements PayPalApi
     public function captureOrder(string $orderId): ?array
     {
         $token = $this->getToken();
+
         return Http::withToken($token['access_token'])
             ->withHeaders([
                 'Prefer' => 'return=representation',
@@ -79,7 +85,7 @@ class PayPalApiClient implements PayPalApi
             'Connection' => 'Close',
         ])
             ->withoutRedirecting()
-            ->withBody('cmd=_notify-validate&' . $querystring, 'application/x-www-form-urlencoded')
+            ->withBody('cmd=_notify-validate&'.$querystring, 'application/x-www-form-urlencoded')
             ->post($this->ipnUrl)
             ->throw()
             ->body();
@@ -89,6 +95,7 @@ class PayPalApiClient implements PayPalApi
     {
         return Cache::remember("paypal-token-{$this->apiClientKey}", 1000, function () {
             Log::debug('Obtaining PayPal token from live server');
+
             return Http::withBasicAuth($this->apiClientKey, $this->apiClientSecret)
                 ->asForm()
                 ->post("https://{$this->host}/v1/oauth2/token", [
