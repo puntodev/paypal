@@ -10,7 +10,7 @@ It is not an application: it is published to Packagist and consumed from Laravel
 
 - **Namespace:** `Puntodev\Payments\` (PSR-4, mapped to `src/`)
 - **PHP:** `>=8.4 <9.0`
-- **Main dependency:** `illuminate/support` (`^12.53 || ^13.0`)
+- **Main dependency:** `illuminate/support` (`^13.0`, Laravel 13+)
 - **License:** MIT
 
 ## Architecture
