@@ -5,7 +5,9 @@ namespace Puntodev\Payments;
 class PayPalClient implements PayPal
 {
     private string $clientId;
+
     private string $clientSecret;
+
     private bool $useSandbox;
 
     public function __construct(string $clientId, string $clientSecret, bool $useSandbox)
