@@ -1,86 +1,88 @@
 # AGENTS.md
 
-Guía para agentes de IA que trabajen en este repositorio.
+Guidance for AI agents working in this repository.
 
-## Qué es este proyecto
+## What this project is
 
-`puntodev/paypal` es un **paquete de Laravel** (librería de Composer) que provee un
-cliente liviano para la **PayPal Orders v2 API**, más verificación de IPN clásico.
-No es una aplicación: se publica en Packagist y se consume desde apps Laravel.
+`puntodev/paypal` is a **Laravel package** (Composer library) that provides a
+lightweight client for the **PayPal Orders v2 API**, plus classic IPN verification.
+It is not an application: it is published to Packagist and consumed from Laravel apps.
 
-- **Namespace:** `Puntodev\Payments\` (PSR-4, mapeado a `src/`)
+- **Namespace:** `Puntodev\Payments\` (PSR-4, mapped to `src/`)
 - **PHP:** `>=8.4 <9.0`
-- **Dependencia principal:** `illuminate/support` (`^12.53 || ^13.0`)
-- **Licencia:** MIT
+- **Main dependency:** `illuminate/support` (`^12.53 || ^13.0`)
+- **License:** MIT
 
-## Arquitectura
+## Architecture
 
-El paquete se estructura en torno a dos interfaces y sus implementaciones, más un
-builder para construir el payload de la orden.
+The package is built around two interfaces and their implementations, plus a builder
+that assembles the order payload.
 
-| Archivo | Rol |
-|---------|-----|
-| `src/PayPal.php` | Interfaz fábrica. Expone `defaultClient()` y `withCredentials($id, $secret)`. |
-| `src/PayPalClient.php` | Implementación de `PayPal`. Conserva credenciales por defecto + flag `useSandbox` y crea instancias de `PayPalApiClient`. |
-| `src/PayPalApi.php` | Interfaz del cliente HTTP: `createOrder`, `findOrderById`, `captureOrder`, `verifyIpn`. |
-| `src/PayPalApiClient.php` | Implementación real contra la API de PayPal usando el HTTP client de Laravel (`Http`). Maneja host sandbox/producción, token OAuth2 cacheado e IPN. |
-| `src/OrderBuilder.php` | Builder fluido que arma el array de la orden v2 (`intent`, `purchase_units`, `payment_source`, etc.). |
-| `src/PayPalServiceProvider.php` | Registra `PayPal` como singleton, publica el config y aplica `mergeConfigFrom`. |
-| `src/PayPalFacade.php` | Facade `Paypal` que resuelve al binding `PayPal::class`. |
-| `config/paypal.php` | Lee `PAYPAL_API_CLIENT_ID`, `PAYPAL_API_CLIENT_SECRET`, `SANDBOX_GATEWAYS`. |
+| File | Role |
+|------|------|
+| `src/PayPal.php` | Factory interface. Exposes `defaultClient()` and `withCredentials($id, $secret)`. |
+| `src/PayPalClient.php` | `PayPal` implementation. Holds the default credentials + `useSandbox` flag and creates `PayPalApiClient` instances. |
+| `src/PayPalApi.php` | HTTP client interface: `createOrder`, `findOrderById`, `captureOrder`, `verifyIpn`. |
+| `src/PayPalApiClient.php` | Real implementation against the PayPal API using Laravel's HTTP client (`Http`). Handles the sandbox/production host, cached OAuth2 token and IPN. |
+| `src/OrderBuilder.php` | Fluent builder that assembles the Orders v2 array (`intent`, `purchase_units`, `payment_source`, etc.). |
+| `src/PayPalServiceProvider.php` | Registers `PayPal` as a singleton, publishes the config and applies `mergeConfigFrom`. |
+| `src/PayPalFacade.php` | `Paypal` facade resolving to the `PayPal::class` binding. |
+| `config/paypal.php` | Reads `PAYPAL_API_CLIENT_ID`, `PAYPAL_API_CLIENT_SECRET`, `SANDBOX_GATEWAYS`. |
 
-### Detalles importantes de comportamiento
+### Important behavior details
 
-- **Sandbox vs producción:** controlado por el flag `useSandbox`. Cambia el host
-  (`api.sandbox.paypal.com` vs `api.paypal.com`) y la URL de IPN
-  (`ipnpb.sandbox.paypal.com` vs `ipnpb.paypal.com`). El config lo toma de la env
-  `SANDBOX_GATEWAYS`.
-- **Token OAuth2:** `getToken()` cachea el `access_token` por 1000 segundos con clave
-  `paypal-token-{clientId}` vía `Cache::remember`. Usa `withBasicAuth` contra
-  `/v1/oauth2/token` con `grant_type=client_credentials`.
-- **Órdenes:** todas las llamadas a `/v2/checkout/orders` envían el header
-  `Prefer: return=representation` y usan `->throw()`, por lo que los errores HTTP
-  se propagan como `RequestException`.
-- **IPN:** `verifyIpn()` reenvía el querystring con `cmd=_notify-validate` y devuelve
-  el body crudo de PayPal (`VERIFIED` / `INVALID`), sin redirecciones.
-- **OrderBuilder:** intent fijo `CAPTURE`, ítems como `DIGITAL_GOODS`,
-  `shipping_preference: NO_SHIPPING`. El `discount` solo se agrega al `breakdown`
-  cuando es mayor a 0. Locale por defecto `es-AR`.
+- **Sandbox vs production:** controlled by the `useSandbox` flag. It switches the host
+  (`api.sandbox.paypal.com` vs `api.paypal.com`) and the IPN URL
+  (`ipnpb.sandbox.paypal.com` vs `ipnpb.paypal.com`). The config reads it from the
+  `SANDBOX_GATEWAYS` env var.
+- **OAuth2 token:** `getToken()` caches the `access_token` for 1000 seconds under the
+  key `paypal-token-{clientId}` via `Cache::remember`. It uses `withBasicAuth` against
+  `/v1/oauth2/token` with `grant_type=client_credentials`.
+- **Orders:** all calls to `/v2/checkout/orders` send the `Prefer: return=representation`
+  header and use `->throw()`, so HTTP errors propagate as `RequestException`.
+- **IPN:** `verifyIpn()` re-posts the query string with `cmd=_notify-validate` and returns
+  PayPal's raw body (`VERIFIED` / `INVALID`), without following redirects.
+- **OrderBuilder:** fixed `CAPTURE` intent, items sent as `DIGITAL_GOODS`,
+  `shipping_preference: NO_SHIPPING`. The `discount` is only added to the `breakdown`
+  when greater than 0. Default locale is `es-AR`.
 
-## Auto-registro en Laravel (package discovery)
+## Laravel auto-registration (package discovery)
 
-Definido en `composer.json` → `extra.laravel`:
+Defined in `composer.json` → `extra.laravel`:
 - Provider: `Puntodev\Payments\PayPalServiceProvider`
 - Alias/Facade: `Paypal` → `Puntodev\Payments\PayPalFacade`
 
-## Cómo correr y testear
+## How to run and test
 
 ```bash
 composer install
 composer test            # vendor/bin/phpunit
-composer test-coverage   # genera coverage HTML en ./coverage
+composer test-coverage   # generates HTML coverage report under ./coverage
+composer lint            # vendor/bin/pint --test (style check, no changes)
+composer format          # vendor/bin/pint (fix style)
 ```
 
-- Los tests usan **Orchestra Testbench** (`tests/TestCase.php` extiende
-  `Orchestra\Testbench\TestCase` y registra el service provider).
-- `phpunit.xml.dist` fuerza `SANDBOX_GATEWAYS=true`, así que los tests apuntan al
-  **sandbox de PayPal**.
-- ⚠️ **`tests/PayPalApiTest.php` hace llamadas HTTP reales al sandbox.** Requiere
-  credenciales válidas en `PAYPAL_API_CLIENT_ID` / `PAYPAL_API_CLIENT_SECRET`
-  (en `.env` localmente, o GitHub Secrets en CI). No son tests unitarios aislados.
-- CI: `.github/workflows/php.yml` corre sobre PHP 8.4 en cada push/PR a `master`.
+- Tests use **Orchestra Testbench** (`tests/TestCase.php` extends
+  `Orchestra\Testbench\TestCase` and registers the service provider).
+- `phpunit.xml.dist` forces `SANDBOX_GATEWAYS=true`, so tests target the
+  **PayPal sandbox**.
+- ⚠️ **`tests/PayPalApiTest.php` makes real HTTP calls to the sandbox.** It requires
+  valid credentials in `PAYPAL_API_CLIENT_ID` / `PAYPAL_API_CLIENT_SECRET`
+  (in `.env` locally, or GitHub Secrets in CI). These are not isolated unit tests.
+- CI: `.github/workflows/php.yml` runs on PHP 8.4 on every push/PR to `master`,
+  including a Pint code-style check.
 
-## Convenciones
+## Conventions
 
-- Sin framework de estilo configurado; seguir el estilo existente (PSR-12, 4 espacios,
-  `.editorconfig`).
-- Las interfaces (`PayPal`, `PayPalApi`) son el contrato público: si se agrega un método
-  al cliente, agregarlo también a la interfaz y a los tests.
-- Los métodos de la API devuelven `array`/`?array` (el `->json()` de Laravel) o `string`
-  para IPN; mantener esa convención.
+- Code style is enforced by **Laravel Pint** (`pint.json`, `laravel` preset). Run
+  `composer format` before committing; `composer lint` is what CI runs.
+- The interfaces (`PayPal`, `PayPalApi`) are the public contract: when adding a method
+  to the client, add it to the interface and to the tests as well.
+- API methods return `array`/`?array` (Laravel's `->json()`) or `string` for IPN; keep
+  that convention.
 
-## Reglas de workflow (heredadas de la config global del usuario)
+## Workflow rules (inherited from the user's global config)
 
-- **No commitear en `master`.** Trabajar siempre en branch o worktree.
-- Los PRs se abren siempre como **Draft**.
-- Hacer `git pull` antes de empezar para tener la última versión.
+- **Do not commit on `master`.** Always work on a branch or worktree.
+- PRs are always opened as **Draft**.
+- Run `git pull` before starting to make sure you have the latest version.
