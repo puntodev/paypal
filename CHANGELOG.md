@@ -9,7 +9,18 @@ Released entries below are maintained automatically from the GitHub release note
 (see `.github/workflows/update-changelog.yml`); the `Unreleased` section tracks the
 range of changes on `master` that have not been released yet.
 
-## [Unreleased](https://github.com/puntodev/paypal/compare/v6.0.0...HEAD)
+## [Unreleased](https://github.com/puntodev/paypal/compare/v6.0.1...HEAD)
+
+## [v6.0.1](https://github.com/puntodev/paypal/compare/v6.0.0...v6.0.1) - 2026-06-28
+
+<!-- Release notes generated using configuration in .github/release.yml at master -->
+### What's Changed
+
+#### Other Changes
+
+* chore(deps): bump guzzle & psr7 (Dependabot security fixes) by @marianogoldman in https://github.com/puntodev/paypal/pull/51
+
+**Full Changelog**: https://github.com/puntodev/paypal/compare/v6.0.0...v6.0.1
 
 ## [v6.0.0](https://github.com/puntodev/paypal/compare/v5...v6.0.0) - 2026-06-13
 
