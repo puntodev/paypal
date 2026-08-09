@@ -9,7 +9,19 @@ Released entries below are maintained automatically from the GitHub release note
 (see `.github/workflows/update-changelog.yml`); the `Unreleased` section tracks the
 range of changes on `main` that have not been released yet.
 
-## [Unreleased](https://github.com/puntodev/paypal/compare/v6.0.1...HEAD)
+## [Unreleased](https://github.com/puntodev/paypal/compare/v6.0.2...HEAD)
+
+## [v6.0.2](https://github.com/puntodev/paypal/compare/v6.0.1...v6.0.2) - 2026-08-09
+
+<!-- Release notes generated using configuration in .github/release.yml at main -->
+### What's Changed
+
+#### Other Changes
+
+* chore(deps): fix Dependabot security alerts (guzzle, commonmark) by @marianogoldman in https://github.com/puntodev/paypal/pull/52
+* chore: rename default branch master -> main by @marianogoldman in https://github.com/puntodev/paypal/pull/53
+
+**Full Changelog**: https://github.com/puntodev/paypal/compare/v6.0.1...v6.0.2
 
 ## [v6.0.1](https://github.com/puntodev/paypal/compare/v6.0.0...v6.0.1) - 2026-06-28
 
