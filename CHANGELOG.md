@@ -9,7 +9,19 @@ Released entries below are maintained automatically from the GitHub release note
 (see `.github/workflows/update-changelog.yml`); the `Unreleased` section tracks the
 range of changes on `main` that have not been released yet.
 
-## [Unreleased](https://github.com/puntodev/paypal/compare/v6.0.2...HEAD)
+## [Unreleased](https://github.com/puntodev/paypal/compare/v6.0.3...HEAD)
+
+## [v6.0.3](https://github.com/puntodev/paypal/compare/v6.0.2...v6.0.3) - 2026-09-03
+
+<!-- Release notes generated using configuration in .github/release.yml at main -->
+### What's Changed
+
+#### Other Changes
+
+* fix(deps): bump league/commonmark to 2.10.0 (Dependabot security alerts) by @marianogoldman in https://github.com/puntodev/paypal/pull/54
+* chore(deps): update all dependencies to latest by @marianogoldman in https://github.com/puntodev/paypal/pull/55
+
+**Full Changelog**: https://github.com/puntodev/paypal/compare/v6.0.2...v6.0.3
 
 ## [v6.0.2](https://github.com/puntodev/paypal/compare/v6.0.1...v6.0.2) - 2026-08-09
 
