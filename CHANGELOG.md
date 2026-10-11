@@ -9,7 +9,22 @@ Released entries below are maintained automatically from the GitHub release note
 (see `.github/workflows/update-changelog.yml`); the `Unreleased` section tracks the
 range of changes on `main` that have not been released yet.
 
-## [Unreleased](https://github.com/puntodev/paypal/compare/v6.0.4...HEAD)
+## [Unreleased](https://github.com/puntodev/paypal/compare/v6.0.5...HEAD)
+
+## [v6.0.5](https://github.com/puntodev/paypal/compare/v6.0.4...v6.0.5) - 2026-10-11
+
+<!-- Release notes generated using configuration in .github/release.yml at main -->
+### What's Changed
+
+#### 🧰 Maintenance & Dependencies
+
+* chore(deps): bump the github-actions group with 2 updates by @dependabot[bot] in https://github.com/puntodev/paypal/pull/58
+
+#### Other Changes
+
+* chore: enable Dependabot version updates by @marianogoldman in https://github.com/puntodev/paypal/pull/57
+
+**Full Changelog**: https://github.com/puntodev/paypal/compare/v6.0.4...v6.0.5
 
 ## [v6.0.4](https://github.com/puntodev/paypal/compare/v6.0.3...v6.0.4) - 2026-10-11
 
