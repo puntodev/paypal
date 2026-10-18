@@ -9,7 +9,7 @@ lightweight client for the **PayPal Orders v2 API**, plus classic IPN verificati
 It is not an application: it is published to Packagist and consumed from Laravel apps.
 
 - **Namespace:** `Puntodev\Payments\` (PSR-4, mapped to `src/`)
-- **PHP:** `>=8.4 <9.0`
+- **PHP:** `^8.5`
 - **Main dependency:** `illuminate/support` (`^13.0`, Laravel 13+)
 - **License:** MIT
 
@@ -69,7 +69,7 @@ composer format          # vendor/bin/pint (fix style)
 - ⚠️ **`tests/PayPalApiTest.php` makes real HTTP calls to the sandbox.** It requires
   valid credentials in `PAYPAL_API_CLIENT_ID` / `PAYPAL_API_CLIENT_SECRET`
   (in `.env` locally, or GitHub Secrets in CI). These are not isolated unit tests.
-- CI: `.github/workflows/php.yml` runs on PHP 8.4 on every push/PR to `main`,
+- CI: `.github/workflows/php.yml` runs on PHP 8.5 on every push/PR to `main`,
   including a Pint code-style check.
 
 ## Conventions
